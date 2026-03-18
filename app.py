@@ -656,8 +656,8 @@ def test_ui():
 let currentMode = 'visual';
 function setMode(mode) {
   currentMode = mode;
-  document.getElementById('visual-mode').style.display = mode === 'visual' ? '' : 'none';
-  document.getElementById('json-mode').style.display   = mode === 'json'   ? '' : 'none';
+  document.getElementById('visual-mode').style.display = mode === 'visual' ? 'block' : 'none';
+  document.getElementById('json-mode').style.display   = mode === 'json'   ? 'block' : 'none';
   document.getElementById('btn-visual').classList.toggle('active', mode === 'visual');
   document.getElementById('btn-json').classList.toggle('active', mode === 'json');
   if (mode === 'json') syncFromSliders();
