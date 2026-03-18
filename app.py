@@ -425,6 +425,26 @@ def test_ui():
     transition: background 0.2s, border-color 0.2s;
   }
   .btn-sm:hover { background: rgba(74,158,255,0.18); border-color: rgba(100,160,255,0.5); }
+  .btn-upload {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    padding: 9px 0;
+    margin-top: 8px;
+    border: 1px dashed rgba(100,160,255,0.3);
+    border-radius: 8px;
+    background: rgba(74,158,255,0.04);
+    color: #4a7ab5;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+  }
+  .btn-upload:hover { background: rgba(74,158,255,0.12); border-color: rgba(100,160,255,0.55); color: #7ab8ff; }
+  #file-upload { display: none; }
 
   #json-response-wrap { display: none; margin-top: 10px; }
   #json-response-wrap label { margin-bottom: 4px; display: block; color: #4a7ab5; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
@@ -607,6 +627,8 @@ def test_ui():
       <button class="btn-sm" onclick="formatJson()">Formatear JSON</button>
       <button class="btn-sm" onclick="syncFromSliders()">Sync desde sliders</button>
     </div>
+    <label class="btn-upload" for="file-upload">&#8593; Subir archivo .json</label>
+    <input type="file" id="file-upload" accept=".json,application/json" onchange="loadJsonFile(event)">
     <div id="json-response-wrap">
       <label>Respuesta</label>
       <div id="json-response"></div>
@@ -644,6 +666,24 @@ function setMode(mode) {
 function syncFromSliders() {
   const payload = getPayload();
   document.getElementById('json-input').value = JSON.stringify(payload, null, 2);
+}
+
+function loadJsonFile(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const parsed = JSON.parse(e.target.result);
+      document.getElementById('json-input').value = JSON.stringify(parsed, null, 2);
+      // Resetear el input para que se pueda subir el mismo archivo de nuevo
+      event.target.value = '';
+    } catch(err) {
+      document.getElementById('json-input').value = e.target.result;
+      event.target.value = '';
+    }
+  };
+  reader.readAsText(file);
 }
 
 function formatJson() {
