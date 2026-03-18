@@ -11,7 +11,7 @@ Endpoints:
 
 import os
 import json
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template_string
 import pandas as pd
 import joblib
 
@@ -204,6 +204,103 @@ def predict():
             'error': 'Error interno al realizar la predicción.',
             'detalle': str(e)
         }), 500
+
+
+@app.route('/test', methods=['GET'])
+def test_ui():
+    """Interfaz web para probar la API desde el navegador."""
+    html = """
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>PoliSistemas — Test API</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 600px; margin: 40px auto; padding: 0 20px; background: #f5f5f5; }
+    h1 { color: #2c3e50; }
+    label { display: block; margin-top: 12px; font-weight: bold; color: #555; }
+    input, select { width: 100%; padding: 8px; margin-top: 4px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+    button { margin-top: 20px; width: 100%; padding: 12px; background: #2980b9; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; }
+    button:hover { background: #1a5276; }
+    #resultado { margin-top: 20px; padding: 16px; background: white; border-radius: 8px; border-left: 4px solid #2980b9; display: none; }
+    #precio { font-size: 2em; color: #27ae60; font-weight: bold; }
+    #error { color: #e74c3c; }
+  </style>
+</head>
+<body>
+  <h1>Prediccion de Precio de Alquiler</h1>
+  <p>Ecuador &mdash; PoliSistemas</p>
+
+  <label>Provincia</label>
+  <select id="provincia">
+    <option>Pichincha</option><option>Guayas</option><option>El Oro</option>
+    <option>Imbabura</option><option>Cotopaxi</option><option>Esmeraldas</option>
+    <option>Los Rios</option><option>Manabi</option><option>Orellana</option><option>Santa Elena</option>
+  </select>
+
+  <label>Lugar (ciudad)</label>
+  <input type="text" id="lugar" value="Quito" placeholder="Ej: Quito, Guayaquil, Machala">
+
+  <label>Numero de dormitorios</label>
+  <input type="number" id="dormitorios" value="3" min="0" max="10">
+
+  <label>Numero de banos</label>
+  <input type="number" id="banos" value="2" min="0" max="10">
+
+  <label>Area (m2)</label>
+  <input type="number" id="area" value="120" min="1">
+
+  <label>Numero de garajes</label>
+  <input type="number" id="garages" value="1" min="0" max="10">
+
+  <button onclick="predecir()">Predecir Precio</button>
+
+  <div id="resultado">
+    <p>Precio estimado de alquiler:</p>
+    <div id="precio"></div>
+    <div id="error"></div>
+  </div>
+
+  <script>
+    async function predecir() {
+      const payload = {
+        provincia: document.getElementById('provincia').value,
+        lugar: document.getElementById('lugar').value,
+        num_dormitorios: parseFloat(document.getElementById('dormitorios').value),
+        num_banos: parseFloat(document.getElementById('banos').value),
+        area: parseFloat(document.getElementById('area').value),
+        num_garages: parseFloat(document.getElementById('garages').value)
+      };
+      const res = document.getElementById('resultado');
+      const precioEl = document.getElementById('precio');
+      const errorEl = document.getElementById('error');
+      res.style.display = 'block';
+      precioEl.textContent = 'Calculando...';
+      errorEl.textContent = '';
+      try {
+        const r = await fetch('/predict', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(payload)
+        });
+        const data = await r.json();
+        if (data.prediction !== undefined) {
+          precioEl.textContent = '$' + data.prediction.toFixed(2) + ' USD/mes';
+          errorEl.textContent = '';
+        } else {
+          precioEl.textContent = '';
+          errorEl.textContent = 'Error: ' + (data.detalle || data.error);
+        }
+      } catch(e) {
+        precioEl.textContent = '';
+        errorEl.textContent = 'Error de conexion: ' + e.message;
+      }
+    }
+  </script>
+</body>
+</html>
+"""
+    return render_template_string(html)
 
 
 @app.errorhandler(404)
