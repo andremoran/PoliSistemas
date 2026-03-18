@@ -1,0 +1,20 @@
+{
+  "modelo": "GradientBoostingRegressor",
+  "features": [
+    "provincia",
+    "lugar",
+    "num_dormitorios",
+    "num_banos",
+    "area",
+    "num_garages"
+  ],
+  "target": "precio",
+  "metricas": {
+    "MAE": 342.81,
+    "RMSE": 688.28,
+    "R2": 0.4276,
+    "CV_R2_5fold": 0.5145,
+    "train_samples": 400,
+    "test_samples": 100
+  }
+}
