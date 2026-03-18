@@ -97,6 +97,12 @@ def preparar_dataframe(datos: dict) -> pd.DataFrame:
 # ---------------------------------------------------------------------------
 # Rutas
 # ---------------------------------------------------------------------------
+@app.route('/ping', methods=['GET'])
+def ping():
+    """Endpoint minimo para keep-alive (UptimeRobot u otro monitor)."""
+    return 'pong', 200
+
+
 @app.route('/', methods=['GET'])
 def health_check():
     """
