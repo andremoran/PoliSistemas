@@ -1,13 +1,21 @@
 # 🏠 Predicción de Precio de Alquiler — Ecuador
 
 **PoliSistemas · Laboratorio de Ciencia de Datos**
-Proceso de Selección — Técnico de Investigación
+
+## Demo en vivo
+
+| | |
+|---|---|
+| **Interfaz web interactiva** | **https://polisistemas.onrender.com/test** |
+| **API REST pública** | **https://polisistemas.onrender.com** |
+
+> Prueba la predicción directamente en el navegador — sin instalación, sin código.
 
 ---
 
 ## Descripción de la Solución
 
-Flujo completo de ciencia de datos para predecir el precio mensual de alquiler de inmuebles en Ecuador, desde el análisis exploratorio hasta el despliegue de una API REST pública.
+Plataforma completa de predicción de precios de alquiler de inmuebles en Ecuador, con interfaz web interactiva y API REST pública. Incluye análisis exploratorio de datos, modelo de Machine Learning con Gradient Boosting, y despliegue en producción.
 
 ### Stack Tecnológico
 

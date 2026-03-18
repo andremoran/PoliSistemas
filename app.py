@@ -220,7 +220,7 @@ def test_ui():
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PoliSistemas — Prediccion de Alquiler</title>
+<title>PoliSistemas &mdash; Predicci&oacute;n de Alquiler</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -250,9 +250,9 @@ def test_ui():
     -webkit-backdrop-filter: blur(18px);
     border: 1px solid rgba(100, 160, 255, 0.18);
     border-radius: 20px;
-    padding: 40px 44px;
+    padding: 36px 44px 28px;
     width: 100%;
-    max-width: 480px;
+    max-width: 490px;
     box-shadow: 0 8px 60px rgba(0, 80, 200, 0.25), 0 0 0 1px rgba(100,160,255,0.08);
     transition: box-shadow 0.4s ease;
   }
@@ -260,7 +260,7 @@ def test_ui():
     box-shadow: 0 12px 80px rgba(0, 120, 255, 0.35), 0 0 0 1px rgba(100,180,255,0.18);
   }
 
-  .header { text-align: center; margin-bottom: 28px; }
+  .header { text-align: center; margin-bottom: 24px; }
   .header .badge {
     display: inline-block;
     background: linear-gradient(135deg, #1a4aff22, #00d4ff22);
@@ -272,7 +272,7 @@ def test_ui():
     text-transform: uppercase;
     padding: 4px 12px;
     border-radius: 20px;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
   }
   .header h1 {
     font-size: 22px;
@@ -284,6 +284,41 @@ def test_ui():
     margin-bottom: 4px;
   }
   .header p { color: #6b85b5; font-size: 13px; }
+  .header .stats {
+    margin-top: 6px;
+    font-size: 11px;
+    color: #4a7ab5;
+    letter-spacing: 0.5px;
+  }
+  .header .stats span { color: #4a9eff; font-weight: 700; }
+
+  /* ── Mode toggle ── */
+  .mode-toggle {
+    display: flex;
+    gap: 0;
+    border: 1px solid rgba(100,160,255,0.2);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 18px;
+  }
+  .mode-toggle button {
+    flex: 1;
+    padding: 8px 0;
+    background: transparent;
+    border: none;
+    color: #5a80c0;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+  .mode-toggle button.active {
+    background: rgba(74,158,255,0.18);
+    color: #7ab8ff;
+  }
+  .mode-toggle button:first-child { border-right: 1px solid rgba(100,160,255,0.15); }
 
   .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
   .full { grid-column: 1 / -1; }
@@ -297,8 +332,18 @@ def test_ui():
     text-transform: uppercase;
     color: #5a80c0;
     transition: color 0.25s;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
   .field:focus-within label { color: #7ab8ff; }
+  .lval {
+    color: #4a9eff;
+    font-size: 13px;
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 700;
+  }
 
   input, select {
     background: rgba(255,255,255,0.04);
@@ -330,7 +375,6 @@ def test_ui():
 
   input[type="number"]::-webkit-inner-spin-button { opacity: 0.4; filter: invert(1); }
 
-  .slider-wrap { display: flex; flex-direction: column; gap: 5px; }
   input[type="range"] {
     -webkit-appearance: auto;
     appearance: auto;
@@ -341,17 +385,61 @@ def test_ui():
     background: rgba(100,160,255,0.15);
     border: none;
     border-radius: 4px;
+    transform: none;
   }
   input[type="range"]:focus { box-shadow: none; transform: none; }
-  .range-val {
-    text-align: right;
-    font-size: 13px;
-    font-weight: 700;
-    color: #4a9eff;
-    min-width: 44px;
+
+  /* ── JSON mode ── */
+  #json-mode { display: none; }
+  #json-input {
+    width: 100%;
+    height: 140px;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(100,160,255,0.2);
+    border-radius: 10px;
+    color: #a0d4ff;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 12px;
+    padding: 12px;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.25s;
   }
-  .range-row { display: flex; align-items: center; gap: 10px; }
-  .range-row input { flex: 1; }
+  #json-input:focus { border-color: rgba(100,180,255,0.5); }
+  .json-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .btn-sm {
+    flex: 1;
+    padding: 8px 0;
+    border: 1px solid rgba(100,160,255,0.25);
+    border-radius: 8px;
+    background: rgba(74,158,255,0.08);
+    color: #7ab8ff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .btn-sm:hover { background: rgba(74,158,255,0.18); border-color: rgba(100,160,255,0.5); }
+
+  #json-response-wrap { display: none; margin-top: 10px; }
+  #json-response-wrap label { margin-bottom: 4px; display: block; color: #4a7ab5; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
+  #json-response {
+    width: 100%;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(100,160,255,0.15);
+    border-radius: 10px;
+    color: #4aff8c;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 12px;
+    padding: 10px 12px;
+    min-height: 48px;
+    white-space: pre;
+  }
 
   .btn {
     width: 100%;
@@ -429,6 +517,17 @@ def test_ui():
     0%,80%,100% { transform: scale(0.6); opacity: 0.4; }
     40%          { transform: scale(1.1); opacity: 1; }
   }
+
+  /* ── Footer ── */
+  .footer {
+    margin-top: 18px;
+    text-align: center;
+    font-size: 11px;
+    color: #2a4a7a;
+    line-height: 1.8;
+  }
+  .footer a { color: #3a6aaa; text-decoration: none; }
+  .footer a:hover { color: #7ab8ff; }
 </style>
 </head>
 <body>
@@ -437,60 +536,80 @@ def test_ui():
 
 <div class="card" id="card">
   <div class="header">
-    <div class="badge">PoliSistemas · ML</div>
-    <h1>Prediccion de Alquiler</h1>
+    <div class="badge">PoliSistemas &middot; ML</div>
+    <h1>Predicci&oacute;n de Alquiler</h1>
     <p>Ecuador &mdash; Gradient Boosting Regressor</p>
+    <div class="stats">R&sup2; <span>0.62</span> &nbsp;&bull;&nbsp; <span>483</span> inmuebles reales &nbsp;&bull;&nbsp; MAE &lt; $185</div>
   </div>
 
-  <div class="grid">
-    <div class="field full">
-      <label>Provincia</label>
-      <select id="provincia">
-        <option>Pichincha</option>
-        <option>Guayas</option>
-        <option>El Oro</option>
-        <option>Imbabura</option>
-        <option>Cotopaxi</option>
-        <option>Esmeraldas</option>
-        <option>Los Rios</option>
-        <option>Manabi</option>
-        <option>Orellana</option>
-        <option>Santa Elena</option>
-      </select>
-    </div>
+  <div class="mode-toggle">
+    <button id="btn-visual" class="active" onclick="setMode('visual')">&#9776; Modo Visual</button>
+    <button id="btn-json"   onclick="setMode('json')">&#123;&#125; Modo JSON</button>
+  </div>
 
-    <div class="field full">
-      <label>Ciudad / Lugar</label>
-      <input type="text" id="lugar" value="Quito" placeholder="Quito, Guayaquil, Machala...">
-    </div>
+  <!-- ── Modo Visual ── -->
+  <div id="visual-mode">
+    <div class="grid">
+      <div class="field full">
+        <label>Provincia</label>
+        <select id="provincia">
+          <option>Pichincha</option>
+          <option>Guayas</option>
+          <option>El Oro</option>
+          <option>Imbabura</option>
+          <option>Cotopaxi</option>
+          <option>Esmeraldas</option>
+          <option>Los Rios</option>
+          <option>Manabi</option>
+          <option>Orellana</option>
+          <option>Santa Elena</option>
+        </select>
+      </div>
 
-    <div class="field">
-      <label>Dormitorios</label>
-      <div class="range-row">
+      <div class="field full">
+        <label>Ciudad / Lugar</label>
+        <input type="text" id="lugar" value="Quito" placeholder="Quito, Guayaquil, Machala...">
+      </div>
+
+      <div class="field">
+        <label>Dormitorios <span class="lval" id="vDorm">3</span></label>
         <input type="range" id="dormitorios" min="1" max="6" value="3" oninput="updateVal('dormitorios','vDorm')">
-        <span class="range-val" id="vDorm">3</span>
       </div>
-    </div>
 
-    <div class="field">
-      <label>Banos</label>
-      <div class="range-row">
+      <div class="field">
+        <label>Ba&ntilde;os <span class="lval" id="vBano">2</span></label>
         <input type="range" id="banos" min="1" max="5" value="2" oninput="updateVal('banos','vBano')">
-        <span class="range-val" id="vBano">2</span>
       </div>
-    </div>
 
-    <div class="field full slider-wrap">
-      <label>Area (m&sup2;) &nbsp;<span style="color:#4a9eff;font-size:13px;text-transform:none;letter-spacing:0" id="vArea">120</span></label>
-      <input type="range" id="area" min="20" max="500" value="120" oninput="updateVal('area','vArea')">
-    </div>
+      <div class="field full">
+        <label>Area (m&sup2;) <span class="lval" id="vArea">120</span></label>
+        <input type="range" id="area" min="20" max="500" value="120" oninput="updateVal('area','vArea')">
+      </div>
 
-    <div class="field full">
-      <label>Garajes</label>
-      <div class="range-row">
+      <div class="field full">
+        <label>Garajes <span class="lval" id="vGar">1</span></label>
         <input type="range" id="garages" min="0" max="4" value="1" oninput="updateVal('garages','vGar')">
-        <span class="range-val" id="vGar">1</span>
       </div>
+    </div>
+  </div>
+
+  <!-- ── Modo JSON ── -->
+  <div id="json-mode">
+    <textarea id="json-input" spellcheck="false">{
+  "provincia": "Pichincha",
+  "lugar": "Quito",
+  "num_dormitorios": 3,
+  "num_banos": 2,
+  "area": 120,
+  "num_garages": 1
+}</textarea>
+    <div class="json-actions">
+      <button class="btn-sm" onclick="formatJson()">Formatear JSON</button>
+      <button class="btn-sm" onclick="syncFromSliders()">Sync desde sliders</button>
+    </div>
+    <div id="json-response-wrap">
+      <label>Respuesta</label>
+      <div id="json-response"></div>
     </div>
   </div>
 
@@ -502,15 +621,63 @@ def test_ui():
     <div class="result-sub" id="result-sub"></div>
     <div id="error-msg"></div>
   </div>
+
+  <div class="footer">
+    API: <a href="/predict" target="_blank">/predict</a> &nbsp;&bull;&nbsp;
+    <a href="/info" target="_blank">/info</a> &nbsp;&bull;&nbsp;
+    <a href="https://github.com/andremoran/PoliSistemas" target="_blank">GitHub</a>
+  </div>
 </div>
 
 <script>
-// ─── Sliders ──────────────────────────────────────────────────────────────────
+// ── Mode toggle ──────────────────────────────────────────────────────────────
+let currentMode = 'visual';
+function setMode(mode) {
+  currentMode = mode;
+  document.getElementById('visual-mode').style.display = mode === 'visual' ? '' : 'none';
+  document.getElementById('json-mode').style.display   = mode === 'json'   ? '' : 'none';
+  document.getElementById('btn-visual').classList.toggle('active', mode === 'visual');
+  document.getElementById('btn-json').classList.toggle('active', mode === 'json');
+  if (mode === 'json') syncFromSliders();
+}
+
+function syncFromSliders() {
+  const payload = getPayload();
+  document.getElementById('json-input').value = JSON.stringify(payload, null, 2);
+}
+
+function formatJson() {
+  try {
+    const parsed = JSON.parse(document.getElementById('json-input').value);
+    document.getElementById('json-input').value = JSON.stringify(parsed, null, 2);
+  } catch(e) {
+    document.getElementById('json-input').style.borderColor = 'rgba(255,100,100,0.5)';
+    setTimeout(() => document.getElementById('json-input').style.borderColor = '', 1200);
+  }
+}
+
+// ── Sliders ──────────────────────────────────────────────────────────────────
 function updateVal(id, valId) {
   document.getElementById(valId).textContent = document.getElementById(id).value;
 }
 
-// ─── Boton ripple ─────────────────────────────────────────────────────────────
+// ── Payload builder ──────────────────────────────────────────────────────────
+function getPayload() {
+  if (currentMode === 'json') {
+    try { return JSON.parse(document.getElementById('json-input').value); }
+    catch(e) { throw new Error('JSON inválido: ' + e.message); }
+  }
+  return {
+    provincia:       document.getElementById('provincia').value,
+    lugar:           document.getElementById('lugar').value.trim() || 'Quito',
+    num_dormitorios: parseFloat(document.getElementById('dormitorios').value),
+    num_banos:       parseFloat(document.getElementById('banos').value),
+    area:            parseFloat(document.getElementById('area').value),
+    num_garages:     parseFloat(document.getElementById('garages').value)
+  };
+}
+
+// ── Boton ripple ─────────────────────────────────────────────────────────────
 document.getElementById('btnPredecir').addEventListener('mousemove', function(e) {
   const r = this.getBoundingClientRect();
   const x = ((e.clientX - r.left) / r.width * 100).toFixed(1);
@@ -519,13 +686,22 @@ document.getElementById('btnPredecir').addEventListener('mousemove', function(e)
   this.style.setProperty('--my', y + '%');
 });
 
-// ─── Prediccion ───────────────────────────────────────────────────────────────
+// ── Prediccion ───────────────────────────────────────────────────────────────
 async function predecir() {
-  const btn = document.getElementById('btnPredecir');
-  const res = document.getElementById('resultado');
+  const btn    = document.getElementById('btnPredecir');
+  const res    = document.getElementById('resultado');
   const precioEl = document.getElementById('precio');
-  const subEl = document.getElementById('result-sub');
-  const errEl = document.getElementById('error-msg');
+  const subEl  = document.getElementById('result-sub');
+  const errEl  = document.getElementById('error-msg');
+
+  let payload;
+  try { payload = getPayload(); }
+  catch(e) {
+    res.style.display = 'block';
+    precioEl.textContent = '';
+    errEl.textContent = e.message;
+    return;
+  }
 
   btn.classList.add('loading');
   btn.innerHTML = '<div class="dots-loader"><span></span><span></span><span></span></div>';
@@ -534,14 +710,8 @@ async function predecir() {
   subEl.textContent = '';
   errEl.textContent = '';
 
-  const payload = {
-    provincia:       document.getElementById('provincia').value,
-    lugar:           document.getElementById('lugar').value.trim() || 'Quito',
-    num_dormitorios: parseFloat(document.getElementById('dormitorios').value),
-    num_banos:       parseFloat(document.getElementById('banos').value),
-    area:            parseFloat(document.getElementById('area').value),
-    num_garages:     parseFloat(document.getElementById('garages').value)
-  };
+  // Ocultar respuesta JSON anterior
+  document.getElementById('json-response-wrap').style.display = 'none';
 
   try {
     const r = await fetch('/predict', {
@@ -550,17 +720,25 @@ async function predecir() {
       body: JSON.stringify(payload)
     });
     const data = await r.json();
+
+    // En modo JSON mostrar respuesta en textarea
+    if (currentMode === 'json') {
+      const wrap = document.getElementById('json-response-wrap');
+      document.getElementById('json-response').textContent = JSON.stringify(data, null, 2);
+      wrap.style.display = 'block';
+    }
+
     if (data.prediction !== undefined) {
       const p = data.prediction;
       animateNumber(precioEl, 0, p, 900);
-      subEl.textContent = payload.num_dormitorios + ' dorm · ' + payload.num_banos + ' ban · ' + payload.area + 'm\u00B2 · ' + payload.num_garages + ' gar · ' + payload.lugar + ', ' + payload.provincia;
+      subEl.textContent = payload.num_dormitorios + ' dorm \u00b7 ' + payload.num_banos + ' ba\u00f1 \u00b7 ' + payload.area + 'm\u00B2 \u00b7 ' + payload.num_garages + ' gar \u00b7 ' + payload.lugar + ', ' + payload.provincia;
     } else {
       precioEl.textContent = '';
       errEl.textContent = data.detalle || data.error || 'Error desconocido';
     }
   } catch(e) {
     precioEl.textContent = '';
-    errEl.textContent = 'Error de conexion: ' + e.message;
+    errEl.textContent = 'Error de conexi\u00f3n: ' + e.message;
   }
 
   btn.classList.remove('loading');
@@ -579,7 +757,7 @@ function animateNumber(el, from, to, duration) {
   requestAnimationFrame(step);
 }
 
-// ─── Card tilt on mouse ────────────────────────────────────────────────────────
+// ── Card tilt on mouse ────────────────────────────────────────────────────────
 const card = document.getElementById('card');
 document.addEventListener('mousemove', e => {
   const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
@@ -590,7 +768,7 @@ document.addEventListener('mouseleave', () => {
   card.style.transform = 'perspective(800px) rotateY(0deg) rotateX(0deg)';
 });
 
-// ─── Particulas 3D ────────────────────────────────────────────────────────────
+// ── Particulas 3D ────────────────────────────────────────────────────────────
 const canvas = document.getElementById('bg');
 const ctx    = canvas.getContext('2d');
 
@@ -623,20 +801,14 @@ class Particle {
   }
   project() {
     const scale = FOV / (FOV + this.z);
-    return {
-      sx: this.x * scale + W / 2,
-      sy: this.y * scale + H / 2,
-      scale
-    };
+    return { sx: this.x * scale + W / 2, sy: this.y * scale + H / 2, scale };
   }
   update() {
-    // Atraccion suave al mouse
     const { sx, sy } = this.project();
     const mdx = (mouse.x - sx) * 0.0004;
     const mdy = (mouse.y - sy) * 0.0004;
     this.vx += mdx; this.vy += mdy;
     this.vx *= 0.97; this.vy *= 0.97;
-
     this.x += this.vx; this.y += this.vy; this.z += this.vz;
     if (this.z < -FOV) this.reset(false);
   }
@@ -649,7 +821,6 @@ class Particle {
     ctx.arc(sx, sy, size, 0, Math.PI * 2);
     ctx.fillStyle = `hsla(${this.hue},80%,70%,${alpha})`;
     ctx.fill();
-    return { sx, sy, scale, alpha };
   }
 }
 
